@@ -1,0 +1,126 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#050505">
+  <meta name="description" content="A little about me, all in one place. Connect, follow, or save my contact details.">
+  <title>Your Name — Digital Contact Card</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="card">
+    <div class="cover" aria-hidden="true">
+      <span class="topline">Tap to connect</span>
+    </div>
+
+    <div class="content">
+      <img class="avatar" src="profile.jpg" alt="Sean Kyle P. David">
+      <p class="eyebrow">Digital contact card</p>
+      <h1>Sean Kyle P. David</h1>
+      <p class="role">Your role · Your company</p>
+      <p class="bio">A short introduction goes here. Tell people what you do, what you care about, or what you’re working on.</p>
+
+      <p class="section-label">Get in touch</p>
+      <div class="actions">
+        <a class="action" href="mailto:Kylesean240@gmail.com">
+          <span class="icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/></svg>
+          </span>
+          <span class="action-copy">
+            <span class="action-title">Email me</span>
+            <span class="action-detail">Kylesean240@gmail.com</span>
+          </span>
+          <span class="arrow" aria-hidden="true">↗</span>
+        </a>
+        <a class="action" href="tel:09456844517">
+          <span class="icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M7 3h3l2 5-2 1.5a14 14 0 0 0 4.5 4.5L16 12l5 2v3c0 1.1-.9 2-2 2A16 16 0 0 1 5 5c0-1.1.9-2 2-2Z"/></svg>
+          </span>
+          <span class="action-copy">
+            <span class="action-title">Call me</span>
+            <span class="action-detail">09456844517</span>
+          </span>
+          <span class="arrow" aria-hidden="true">↗</span>
+        </a>
+      </div>
+
+      <p class="section-label">Find me online</p>
+      <div class="socials" aria-label="Social media links">
+        <a class="social-link" href="https://instagram.com/shan.khyle" target="_blank" rel="noopener noreferrer" aria-label="Instagram (opens in a new tab)">
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5h.01"/></svg>
+          Instagram
+        </a>
+        <a class="social-link" href="https://www.facebook.com/Sean Kyle David" target="_blank" rel="noopener noreferrer" aria-label="Facebook (opens in a new tab)">
+          <svg viewBox="0 0 24 24"><path d="M14 8h3V4h-3a5 5 0 0 0-5 5v2H6v4h3v5h4v-5h3l1-4h-4V9a1 1 0 0 1 1-1z"/></svg>
+          Facebook
+        </a>
+        <a class="social-link" href="https://tiktok.com/@shan.khyle" target="_blank" rel="noopener noreferrer" aria-label="TikTok (opens in a new tab)">
+          <svg viewBox="0 0 24 24"><path d="M14 4v10.5a4.5 4.5 0 1 1-4-4.47"/><path d="M14 4c.5 3 2.5 5 6 5"/></svg>
+          TikTok
+        </a>
+      </div>
+
+      <a class="website" href="https://yourdomain.com" target="_blank" rel="noopener noreferrer">
+        yourdomain.com
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9"/><path d="M18 13v5a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h5"/></svg>
+      </a>
+
+      <div class="footer">
+        <span class="footer-note">Made to make staying in touch easy.</span>
+        <button type="button" id="save-contact">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m-5-5 5 5 5-5"/><path d="M5 17v3h14v-3"/></svg>
+          Save contact
+        </button>
+      </div>
+    </div>
+  </main>
+  <div id="notice" class="toast" role="status" aria-live="polite" hidden></div>
+
+  <script>
+    const contact = {
+      name: "Your Name",
+      title: "Your role",
+      email: "Kylesean240@gmail.com",
+      phone: "09456844517",
+      website: "https://yourdomain.com"
+    };
+
+    const saveButton = document.querySelector("#save-contact");
+    const notice = document.querySelector("#notice");
+    let noticeTimer;
+
+    function showNotice(message) {
+      notice.textContent = message;
+      notice.hidden = false;
+      window.clearTimeout(noticeTimer);
+      noticeTimer = window.setTimeout(() => {
+        notice.hidden = true;
+      }, 2800);
+    }
+
+    saveButton.addEventListener("click", () => {
+      const vCard = [
+        "BEGIN:VCARD",
+        "VERSION:3.0",
+        `FN:${contact.name}`,
+        `TITLE:${contact.title}`,
+        `EMAIL;TYPE=INTERNET:${contact.email}`,
+        `TEL;TYPE=CELL:${contact.phone}`,
+        `URL:${contact.website}`,
+        "END:VCARD"
+      ].join("\r\n");
+      const file = new Blob([vCard], { type: "text/vcard;charset=utf-8" });
+      const url = URL.createObjectURL(file);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "contact.vcf";
+      document.body.append(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(url);
+      showNotice("Contact card downloaded.");
+    });
+  </script>
+</body>
+</html>
